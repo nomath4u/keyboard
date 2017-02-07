@@ -77,7 +77,16 @@ uint8_t matrix_scan(void)
         select_row(i);
         _delay_us(30);  // without this wait read unstable value.
         matrix_row_t cols = read_cols();
+	DDRD |= (1 << 3);
+	PORTD &= ~(1 << 3);
         if (matrix_debouncing[i] != cols) {
+	  /*  for(int k = 0; k < cols; k++){
+	        PORTD |= (1 << 6);
+                _delay_us(100000);  // without this wait read unstable value.
+	        PORTD &= ~(1 << 6);
+                _delay_us(100000);  // without this wait read unstable value.
+		
+            }*/
             matrix_debouncing[i] = cols;
             if (debouncing) {
                 debug("bounce!: "); debug_hex(debouncing); debug("\n");
@@ -97,6 +106,7 @@ uint8_t matrix_scan(void)
         }
     }
 
+    matrix_print();
     return 1;
 }
 
@@ -144,13 +154,53 @@ uint8_t matrix_key_count(void)
 static void  init_cols(void)
 {
     // Input with pull-up(DDR:0, PORT:1)
-    DDRB  &= ~(1<<0);
+    /*DDRB  &= ~(1<<0);
     PORTB |=  (1<<0);
+    DDRB  &= ~(1<<1);
+    PORTB |=  (1<<1);*/
+    DDRB = 0;
+    DDRF = 0;
+    DDRC = 0;
+    for(int i = 0; i < 8; i++){
+        PORTB |= (1 << i);
+    }
+    //PORTF = 0xFF;
+    PORTF |= (1 << 0 );
+    PORTF |= (1 << 1 );
+    PORTF |= (1 << 4 );
+    PORTF |= (1 << 5 );
+    PORTF |= (1 << 6 );
+    PORTF |= (1 << 7 );
+
+    PORTC |= (1 << 6);
+    PORTC |= (1 << 7);
 }
 
 static matrix_row_t read_cols(void)
 {
-    return (PINB&(1<<0) ? 0 : (1<<0));
+    int i = 0;
+    matrix_row_t stow = 0; 
+//    stow |= (PINB&(1<<0) ? 0 : (1<<0));
+//    stow |= (PINB&(1<<1) ? 0 : (1<<1));
+    for(int i = 0; i < 8; i++){
+        stow |= (PINB&(1<<i) ? 0 : (1<<i));
+    }
+    /*On the farther end from the pinB stuff*/
+    //stow |= (PINF&(1<<0) ? 0 : (1 << (8 + 0)));
+    //stow |= (PINF&(1<<1) ? 0 : (1 << (8 + 1)));
+    //stow |= (PINF&(1<<4) ? 0 : (1 << (8 + 2)));
+    //stow |= (PINF&(1<<6) ? 0 : (1 << (8 + 3)));
+    stow |= (PINF&(1<<0) ? 0 : (1 << (8 + 0)));
+    stow |= (PINF&(1<<1) ? 0 : (1 << (8 + 1)));
+    stow |= (PINF&(1<<4) ? 0 : (1 << (8 + 2)));
+    stow |= (PINF&(1<<5) ? 0 : (1 << (8 + 3)));
+    stow |= (PINF&(1<<6) ? 0 : (1 << (8 + 4)));
+    stow |= (PINF&(1<<7) ? 0 : (1 << (8 + 5)));
+
+    stow |= (PINC&(1<<6) ? 0 : (1 << (8 + 6)));
+    stow |= (PINC&(1<<7) ? 0 : (1 << (8 + 7)));
+    return stow;
+    //return (PINB&(1<<0) ? 0 : (1<<0));
 }
 
 /* Row pin configuration
@@ -160,17 +210,24 @@ static matrix_row_t read_cols(void)
 static void unselect_rows(void)
 {
     // Hi-Z(DDR:0, PORT:0) to unselect
-    DDRB  &= ~0b00000010;
-    PORTB &= ~0b00000010;
+    DDRD  &= ~0b00111111;
+    PORTD &= ~0b00111111;
 }
 
 static void select_row(uint8_t row)
 {
     // Output low(DDR:1, PORT:0) to select
-    switch (row) {
+    /*switch (row) {
         case 0:
-            DDRB  |= (1<<1);
-            PORTB &= ~(1<<1);
+            DDRB  |= (1<<2);
+            PORTB &= ~(1<<2);
             break;
-    }
+	case 1:
+            DDRB  |= (1<<3);
+            PORTB &= ~(1<<3);
+            break;
+
+    }*/
+    DDRD |= (1 << row);
+    PORTD &= ~(1 << row);
 }
