@@ -73,6 +73,7 @@ void matrix_init(void)
 
 uint8_t matrix_scan(void)
 {
+    report_mouse_t mouse_report = {0, 0, 0, 0, 0};
     for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
         select_row(i);
         _delay_us(30);  // without this wait read unstable value.
@@ -107,6 +108,12 @@ uint8_t matrix_scan(void)
     }
 
     matrix_print();
+    mouse_report.buttons = 0;
+    mouse_report.x = 1;
+    mouse_report.y = 1;
+    mouse_report.v = 1;
+    mouse_report.h = 1;
+    send_mouse(mouse_report);
     return 1;
 }
 
