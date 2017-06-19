@@ -49,11 +49,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KEYMAP( CAPS,   F1,   F2,   F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, INS, DEL, \
-           UP,   GRV,  1,   2,   3, 4, 5, 6, 7, 8, 9, 0, MINS, EQL,DEL, BSPC, \
+           UP,   GRV,  1,   2,   3, 4, 5, 6, 7, 8, 9, 0, MINS, EQL,BSPC, DEL, \
            DOWN, TAB,   Q,   W,   E, R, T,Y,U,I,O,P, LBRC, RBRC, ENT, \
-                 ESC,   A,   S,   D, F, G, H, J, K, L, SCLN, QUOT,RSFT,\
-	         LSFT, Z, X, C, V, B, N, M, COMM, DOT, SLSH, RSFT,RSFT, \
-	         LCTL, FN0, LALT, SPC, SPC, SPC, SPC, SPC, RALT, RCTL, UP, LEFT, DOWN, RGHT
+                 ESC,   A,   S,   D, F, G, H, J, K, L, SCLN, QUOT,ENT,\
+	         LSFT, Z, X, C, V, B, N, M, COMM, DOT, SLSH, RSFT,UP, \
+	         LCTL, FN0, LALT, MS_BTN1, MS_BTN2, SPC, SPC, SPC, RALT, RCTL, UP, LEFT, DOWN, RGHT
 	   ),
 };
 /*

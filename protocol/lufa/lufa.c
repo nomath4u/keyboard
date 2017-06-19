@@ -51,6 +51,7 @@
 
 #include "descriptor.h"
 #include "lufa.h"
+#include "joy_mouse.h"
 
 uint8_t keyboard_idle = 0;
 uint8_t keyboard_protocol = 1;
@@ -587,6 +588,7 @@ int main(void)
 #endif
 
     print("Keyboard start.\n");
+    print("Mouse start.\n");
     while (1) {
         while (USB_DeviceState == DEVICE_STATE_Suspended) {
             print("[s]");
@@ -597,6 +599,7 @@ int main(void)
         }
 
         keyboard_task();
+	joy_mouse_task();
 
 #if !defined(INTERRUPT_CONTROL_ENDPOINT)
         USB_USBTask();

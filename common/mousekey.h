@@ -56,12 +56,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-extern uint8_t mk_delay;
-extern uint8_t mk_interval;
-extern uint8_t mk_max_speed;
-extern uint8_t mk_time_to_max;
-extern uint8_t mk_wheel_max_speed;
-extern uint8_t mk_wheel_time_to_max;
+//extern uint8_t mk_delay;
+//extern uint8_t mk_interval;
+//extern uint8_t mk_max_speed;
+//extern uint8_t mk_time_to_max;
+//extern uint8_t mk_wheel_max_speed;
+//extern uint8_t mk_wheel_time_to_max;
 
 
 void mousekey_task(void);

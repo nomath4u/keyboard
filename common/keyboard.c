@@ -39,6 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef SERIAL_MOUSE_ENABLE
 #include "serial_mouse.h"
 #endif
+#include "joy_mouse.h"
 
 
 #ifdef MATRIX_HAS_GHOST
@@ -69,6 +70,7 @@ void keyboard_init(void)
 #ifdef SERIAL_MOUSE_ENABLE
     serial_mouse_init();
 #endif
+    joy_mouse_init();
 
 
 #ifdef BOOTMAGIC_ENABLE
@@ -135,7 +137,8 @@ MATRIX_LOOP_END:
 #ifdef SERIAL_MOUSE_ENABLE
         serial_mouse_task();
 #endif
-
+    joy_mouse_task();
+    //joy_mouse_send(); //Always send a mouse event
     // update LED
     if (led_status != host_keyboard_leds()) {
         led_status = host_keyboard_leds();

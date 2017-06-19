@@ -202,6 +202,18 @@ void process_action(keyrecord_t *record)
             }
             break;
 #endif
+#ifdef JOY_MOUSE_ENABLE
+        /* Mouse key */
+        case ACT_MOUSEKEY:
+            if (event.pressed) {
+                joy_mouse_on(action.key.code);
+                joy_mouse_send();
+            } else {
+                joy_mouse_off(action.key.code);
+                joy_mouse_send();
+            }
+            break;
+#endif
 #ifndef NO_ACTION_LAYER
         case ACT_LAYER:
             if (action.layer_bitop.on == 0) {
