@@ -1,3 +1,14 @@
+NOTE
+====
+
+This is a really old fork of the following TMK keyboard firmware.
+I started working on this project before I knew enough about git to actually
+fork it and now that it is so old I'm not sure that I want to merge everything 
+so that I could make a fork. Please go checkout the keyboard stuff shown below
+if you are interested.
+
+
+
 TMK Keyboard Firmware Collection
 ================================
 This is a keyboard firmware with some useful features for Atmel AVR controller.
