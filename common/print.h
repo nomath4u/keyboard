@@ -59,7 +59,8 @@ void print_set_sendchar(int8_t (*print_sendchar_func)(uint8_t));
 
 #endif /* __AVR__ */
 
-
+/* float */
+#define print_float(i)		    xprintf("%f", i)
 /* decimal */
 #define print_dec(i)                xprintf("%u", i)
 #define print_decs(i)               xprintf("%d", i)

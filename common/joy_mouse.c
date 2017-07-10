@@ -15,6 +15,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include <util/delay.h>
 #include <avr/io.h>
@@ -47,7 +49,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 #endif
 
-#define DEAD_ZONE_WIDTH 4
+#define DEAD_ZONE_WIDTH 2
+//#define EXP_MAX 5.54 // this is ln(255) which give a max on the curve of JOY_MOVE_MAX
+#define EXP_MAX 5 // this is ln(255) which give a max on the curve of JOY_MOVE_MAX
+#define ELECTRIC_OFFSET 75 //X axis joystick is off by ABOUT this much
 
 static report_mouse_t mouse_report = {};
 static uint8_t mousekey_repeat =  0;
@@ -84,24 +89,21 @@ static uint16_t last_timer = 0;
 static int8_t move_unit(bool is_9)
 {
     int16_t unit;
-    //if (mousekey_accel & (1<<0)) {
-    //    unit = (JOY_MOUSE_MOVE_DELTA * mk_max_speed)/4;
-    //} else if (mousekey_accel & (1<<1)) {
-    //    unit = (JOY_MOUSE_MOVE_DELTA * mk_max_speed)/2;
-    //} else if (mousekey_accel & (1<<2)) {
-    //    unit = (JOY_MOUSE_MOVE_DELTA * mk_max_speed);
-    //} else if (mousekey_repeat == 0) {
-    //    unit = JOY_MOUSE_MOVE_DELTA;
-    //} else if (mousekey_repeat >= mk_time_to_max) {
-    //    unit = JOY_MOUSE_MOVE_DELTA * mk_max_speed;
-    //} else {
-    //    unit = (JOY_MOUSE_MOVE_DELTA * mk_max_speed * mousekey_repeat) / mk_time_to_max;
-    //}
-    unit = ((joy_mouse_read_adc(is_9)* 25) / 950) - 12;
-    //return (unit > JOY_MOUSE_MOVE_MAX ? JOY_MOUSE_MOVE_MAX : (unit == 0 ? 1 : unit));
+    bool pos = 1;
+    unit = joy_mouse_read_adc(is_9) - 512; //Gets a linear distribution of the adc value across the joystick
+    if(is_9){
+    	unit = unit + ELECTRIC_OFFSET;
+    }
+    print_dec(unit);
+    print("\n");
+    if(unit < 0){
+    pos = 0;
+    }
+    unit = pow(M_E, EXP_MAX * (float)( (float)abs(unit) / (float)512) );
+    if(!pos){ unit = unit * -1;} //Need to flip the exponential curve
     if( unit > JOY_MOUSE_MOVE_MAX){ unit = JOY_MOUSE_MOVE_MAX;}
     if( unit < -JOY_MOUSE_MOVE_MAX)  {unit = -JOY_MOUSE_MOVE_MAX;}
-    if (abs(unit) < DEAD_ZONE_WIDTH){ unit = 0;}
+    if (abs(unit) < (DEAD_ZONE_WIDTH )){ unit = 0;}
     return unit;
 }
 

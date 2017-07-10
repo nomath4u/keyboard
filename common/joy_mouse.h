@@ -26,7 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* max value on report descriptor */
 //#define JOY_MOUSE_MOVE_MAX       127
-#define JOY_MOUSE_MOVE_MAX       255
+//#define JOY_MOUSE_MOVE_MAX       255
+#define JOY_MOUSE_MOVE_MAX       127
 #define JOY_MOUSE_WHEEL_MAX      127
 
 #ifndef JOY_MOUSE_MOVE_DELTA
@@ -43,6 +44,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 #ifndef JOY_MOUSE_MAX_SPEED
 #define JOY_MOUSE_MAX_SPEED 40
+#endif
+#ifndef JOY_MOUSE_SCALER
+#define JOY_MOUSE_SCALER 4
 #endif
 #ifndef JOY_MOUSE_TIME_TO_MAX
 #define JOY_MOUSE_TIME_TO_MAX 20
